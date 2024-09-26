@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // Cambiado Switch por Routes
+import { CircularProgress } from '@mui/material';
+import ProtectedRoute from './ProtectedRoute';  // Importamos la ruta protegida
+
+const MainScreen = lazy(() => import('./components/MainScreen'));
+const TriviaScreen = lazy(() => import('./components/TriviaScreen'));
+const ResultsScreen = lazy(() => import('./components/ResultsScreen'));  // Ejemplo de otra pantalla
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Suspense fallback={<CircularProgress />}>
+        <Routes>  {/* Cambiado Switch por Routes */}
+          <Route path="/" element={<MainScreen />} />  {/* Usamos "element" en lugar de "component" */}
+          <Route path="/trivia"  element={<ProtectedRoute element={<TriviaScreen />} />} />
+          <Route path="/result" element={<ProtectedRoute element={<ResultsScreen />} />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }
 
