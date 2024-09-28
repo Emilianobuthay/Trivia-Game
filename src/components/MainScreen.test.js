@@ -1,33 +1,45 @@
-// src/components/MainScreen.test.js
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../store/store';
-import MainScreen from './MainScreen';
+// src/store/triviaSlice.test.js
+import { configureStore } from '@reduxjs/toolkit';
+import triviaReducer, { resetGame } from './triviaSlice'; // Ajusta la ruta según tu estructura
 
-test('renders MainScreen and allows game start', () => {
-  const onStartGame = jest.fn();
+describe('trivia reducer', () => {
+  let store;
 
-  render(
-    <Provider store={store}>
-      <MainScreen onStartGame={onStartGame} />
-    </Provider>
-  );
-
-  // Verifica que el botón de jugar está deshabilitado inicialmente
-  const playButton = screen.getByText('Jugar!');
-  expect(playButton).toBeDisabled();
-
-  // Simula seleccionar una categoría
-  fireEvent.change(screen.getByDisplayValue(/Seleccionar categoría/i), {
-    target: { value: '9' },
+  beforeEach(() => {
+    store = configureStore({ reducer: { trivia: triviaReducer } });
   });
 
-  // Verifica que el botón de jugar ahora está habilitado
-  expect(playButton).toBeEnabled();
+  it('should handle resetGame', () => {
+    // Estado modificado antes de llamar a resetGame
+    const modifiedState = {
+      difficulty: 'hard',
+      category: '9',
+      questions: ['Question 1', 'Question 2'],
+      score: 5,
+      attempts: 2,
+      play: true,
+    };
 
-  // Simula hacer click en el botón de jugar
-  fireEvent.click(playButton);
+    // Aplicar el estado modificado al store
+    store.dispatch({ type: 'trivia/setDifficulty', payload: modifiedState.difficulty });
+    store.dispatch({ type: 'trivia/setCategory', payload: modifiedState.category });
+    store.dispatch({ type: 'trivia/setQuestions', payload: modifiedState.questions });
+    store.dispatch({ type: 'trivia/addScore', payload: modifiedState.score });
+    store.dispatch({ type: 'trivia/addAttempts', payload: modifiedState.attempts - 1 });
+    store.dispatch({ type: 'trivia/setPlay', payload: modifiedState.play });
 
-  expect(onStartGame).toHaveBeenCalled();
+    // Llamar a resetGame
+    store.dispatch(resetGame());
+
+    // Verificar que el nuevo estado sea el esperado
+    const newState = store.getState().trivia;
+    expect(newState).toEqual({
+      difficulty: 'hard', // Mantiene la categoría y dificultad
+      category: '9',
+      questions: [], // Reinicia las preguntas
+      score: 0, // Reinicia el puntaje
+      attempts: 3, // Aumenta el número de intentos
+      play: true, // Asegúrate de que el juego siga activo
+    });
+  });
 });

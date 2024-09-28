@@ -39,6 +39,7 @@ const MainScreen = () => {
 }};
 
 console.log(score, difficulty, category);
+
   return (
     <Container maxWidth="sm">
       <Box mt={5} textAlign="center">

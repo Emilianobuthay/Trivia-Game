@@ -1,10 +1,10 @@
 // src/store/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import triviaReducer from '../Redux/triviaSlice';
+import triviaSlice from '../Redux/triviaSlice';
 
 const store = configureStore({
   reducer: {
-    trivia: triviaReducer,
+    trivia: triviaSlice,
   },
 });
 

@@ -7,75 +7,66 @@ import he from 'he';
 
 const TriviaScreen = () => {
   const { questions } = useSelector((state) => state.trivia);
-  const { currentQuestion, handleAnswer, isGameOver } = useTrivia(questions);
+  const { currentQuestion, currentQuestionIndex, handleAnswer, isGameOver, goToNextQuestion } = useTrivia(questions);
   const navigate = useNavigate();
 
-  // Estado para la respuesta seleccionada
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false); // Estado para mostrar retroalimentación
-  const [allAnswers, setAllAnswers] = useState([]); // Estado para almacenar todas las respuestas mezcladas
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [allAnswers, setAllAnswers] = useState([]);
 
-  // Mezcla las respuestas cuando cambia currentQuestion
   useEffect(() => {
     if (currentQuestion) {
       const mixedAnswers = [
         ...currentQuestion.incorrect_answers,
         currentQuestion.correct_answer,
-      ].sort(() => Math.random() - 0.5); // Mezcla aleatoriamente
+      ].sort(() => Math.random() - 0.5);
       setAllAnswers(mixedAnswers);
-      setSelectedAnswer(null); // Reiniciar selección al cambiar la pregunta
-      setShowFeedback(false); // Reiniciar retroalimentación al cambiar la pregunta
+      setSelectedAnswer(null);
+      setShowFeedback(false);
     }
   }, [currentQuestion]);
 
-  // Verificamos si currentQuestion está definido
   useEffect(() => {
     if (isGameOver) {
       setTimeout(() => {
         navigate('/result', { replace: true });
-      }, 3000);
+      }, 1000);
     }
   }, [isGameOver, navigate]);
 
-  // Agregamos una verificación para asegurarnos de que currentQuestion existe
   if (!currentQuestion) {
     return <Typography variant="h6">Cargando preguntas...</Typography>;
   }
 
-  // Maneja el clic en el botón de respuesta
   const handleButtonClick = (answer) => {
-    if (showFeedback) return; // No permite hacer clic si ya se mostró feedback
-
-    setSelectedAnswer(answer); // Guarda la respuesta seleccionada
+    if (showFeedback) return;
+    setSelectedAnswer(answer);
     handleAnswer(answer === currentQuestion.correct_answer);
-    setShowFeedback(true); // Muestra la retroalimentación
-
-    // Resetea el estado después de un tiempo para permitir al usuario ver los colores
-    setTimeout(() => {
-      setSelectedAnswer(null);
-      setShowFeedback(false); // Oculta la retroalimentación
-    }, 3000);
+    setShowFeedback(true);
   };
 
   return (
     <Container maxWidth="sm">
       <Box mt={5} textAlign="center">
+        {/* Agregar contador de preguntas */}
+        <Typography variant="h6">
+          Pregunta {currentQuestionIndex + 1}/5
+        </Typography>
+        
         <Typography variant="h4">{he.decode(currentQuestion.question)}</Typography>
-
         <Box mt={3}>
           {allAnswers.map((answer, index) => {
             const isSelected = selectedAnswer === answer;
             const isCorrect = answer === currentQuestion.correct_answer;
-
             return (
               <Button
                 key={index}
                 variant="contained"
                 color={showFeedback 
-                  ? (isSelected ? (isCorrect ? 'success' : 'error') : (isCorrect ? 'success' : 'default')) 
+                  ? (isSelected ? (isCorrect ? 'success' : 'error') : (isCorrect ? 'success' : 'default'))
                   : 'primary'}
                 onClick={() => handleButtonClick(answer)}
-                style={{ margin: '10px', width: '100px' }} // Ancho fijo
+                style={{ margin: '10px', width: '100px' }}
                 fullWidth
               >
                 {answer}
@@ -83,6 +74,16 @@ const TriviaScreen = () => {
             );
           })}
         </Box>
+        {showFeedback && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={goToNextQuestion}
+            style={{ marginTop: '20px' }}
+          >
+            Next
+          </Button>
+        )}
       </Box>
     </Container>
   );

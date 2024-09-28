@@ -1,0 +1,131 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Be Vietnam Pro', 'Noto Sans', sans-serif;
+  background-color: #111418;
+  color: white;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.logo {
+  background-image: url("https://cdn.usegalileo.ai/stability/72576d6a-409d-4204-9c32-5a91e7e35e24.png");
+  background-size: cover;
+  background-position: center;
+  width: 64px; /* Size equivalent to size-8 in Tailwind */
+  height: 64px; /* Size equivalent to size-8 in Tailwind */
+  border-radius: 50%;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.theme-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid #3c4753;
+  background-color: #1c2126;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.theme-image {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  padding-top: 100%; /* Aspect ratio 1:1 */
+  border-radius: 0.5rem;
+}
+
+.theme-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.theme-description {
+  color: #9dabb8;
+  font-size: 0.875rem;
+}
+
+.difficulty-selector {
+  display: flex;
+  padding: 1rem;
+}
+
+.difficulty-button {
+  flex: 1;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: bold;
+  height: 44px; /* Size equivalent to h-11 in Tailwind */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #566676;
+}
+
+.difficulty-button.active {
+  background-color: #293038;
+  color: white;
+}
+
+.play-button-container {
+  display: flex;
+  padding: 1rem;
+}
+
+.play-button {
+  flex: 1;
+  background-color: #1980e6;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 9999px; /* Fully rounded */
+  cursor: pointer;
+}
+
+.spacer {
+  height: 5px;
+  background-color: #111418;
+}
+
+  

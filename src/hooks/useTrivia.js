@@ -15,45 +15,42 @@ export const useTrivia = (initialQuestions) => {
       const { fetchQuestions } = await import('../api/triviaApi');
       try {
         const fetchedQuestions = await fetchQuestions(category, difficulty);
-        setQuestions(fetchedQuestions);
+        setQuestions(fetchedQuestions.slice(0, 5)); // Limitar a 5 preguntas
       } catch (error) {
-        setQuestions([]); // Manejo de errores, puedes agregar un mensaje también
+        setQuestions([]);
       }
     };
     loadQuestions();
   }, [category, difficulty]);
 
-  // Manejar la respuesta
   const handleAnswer = (isCorrect) => {
     if (isCorrect) {
       setFeedback('Correct!');
-      dispatch(addScore(20)); // Agrega puntaje aquí
+      dispatch(addScore(20));
     } else {
       setFeedback('Incorrect!');
     }
+  };
 
+  const goToNextQuestion = () => {
     const nextQuestionIndex = currentQuestionIndex + 1;
-
     if (nextQuestionIndex >= questions.length) {
       setIsGameOver(true);
     } else {
-      // Esperar 4 segundos antes de pasar a la siguiente pregunta
-      setTimeout(() => {
-        setCurrentQuestionIndex(nextQuestionIndex);
-        setFeedback(null); // Reiniciar feedback
-        // Reiniciar la respuesta seleccionada (si usas un estado para ello, considera añadirlo aquí)
-      }, 3000); // 4 segundos
+      setCurrentQuestionIndex(nextQuestionIndex);
+      setFeedback(null);
     }
   };
 
-  // Obtener la pregunta actual
   const currentQuestion = questions[currentQuestionIndex];
-  
+
   return {
     questions,
     currentQuestion,
+    currentQuestionIndex, // Añadir esto para el contador
     feedback,
     isGameOver,
     handleAnswer,
+    goToNextQuestion,
   };
 };
