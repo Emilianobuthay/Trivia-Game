@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addScore } from '../Redux/triviaSlice';
+import { addScore, setQuestions } from '../Redux/triviaSlice';
 
-export const useTrivia = (initialQuestions) => {
-  const { category, difficulty } = useSelector((state) => state.trivia);
-  const [questions, setQuestions] = useState(initialQuestions);
+export const useTrivia = () => {
+  const { category, difficulty,questions } = useSelector((state) => state.trivia);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
@@ -15,9 +14,9 @@ export const useTrivia = (initialQuestions) => {
       const { fetchQuestions } = await import('../api/triviaApi');
       try {
         const fetchedQuestions = await fetchQuestions(category, difficulty);
-        setQuestions(fetchedQuestions.slice(0, 5)); // Limitar a 5 preguntas
+        dispatch(setQuestions(fetchedQuestions.slice(0, 5))); // Limitar a 5 preguntas
       } catch (error) {
-        setQuestions([]);
+        dispatch(setQuestions([]));
       }
     };
     loadQuestions();
@@ -47,7 +46,7 @@ export const useTrivia = (initialQuestions) => {
   return {
     questions,
     currentQuestion,
-    currentQuestionIndex, // Añadir esto para el contador
+    currentQuestionIndex, // para el contador
     feedback,
     isGameOver,
     handleAnswer,

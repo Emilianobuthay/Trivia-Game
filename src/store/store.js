@@ -1,4 +1,4 @@
-// src/store/store.js
+
 import { configureStore } from '@reduxjs/toolkit';
 import triviaSlice from '../Redux/triviaSlice';
 

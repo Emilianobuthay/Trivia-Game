@@ -1,21 +1,18 @@
-// src/components/MainScreen.js
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCategory, setDifficulty, exitGame, setPlay } from '../Redux/triviaSlice';
-import { Button, Select, MenuItem, Typography, Container, Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setCategory, setNameCategory, setDifficulty, exitGame, setPlay } from '../Redux/triviaSlice';
+import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getCategoryList } from '../api/triviaApi';
-
+import '../style/MainScreen.css'; 
 
 const MainScreen = () => {
-  const { score, difficulty2, category2, attempts } = useSelector((state) => state.trivia);
   const [category, setCategoryValue] = useState('');
   const [difficulty, setDifficultyValue] = useState('');
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Usar useNavigate aquí
+  const navigate = useNavigate();
 
-  
   useEffect(() => {
     dispatch(exitGame());
     dispatch(setPlay(false));
@@ -28,66 +25,72 @@ const MainScreen = () => {
       }
     };
     fetchCategories();
-  }, []);
-   
-  const handleStartGame = () => {
-    if (category && difficulty) {
-    dispatch(setPlay(true));
-    dispatch(setCategory(category));
-    dispatch(setDifficulty(difficulty));
-    navigate('/trivia'); // Navegar a la pantalla de trivia
-}};
+  }, [dispatch]);
 
-console.log(score, difficulty, category);
+  const handleStartGame = () => {
+    if (category.id && difficulty) {
+      dispatch(setPlay(true));
+      dispatch(setNameCategory(category.name));
+      dispatch(setCategory(category.id));
+      dispatch(setDifficulty(difficulty));
+      navigate('/trivia');
+    }
+  };
+
+  const handleCategoryChange = (event, newCategory) => {
+    if (newCategory !== null) {
+      setCategoryValue(newCategory);
+    }
+  };
+
+  const handleDifficultyChange = (event, newDifficulty) => {
+    if (newDifficulty !== null) {
+      setDifficultyValue(newDifficulty);
+    }
+  };
 
   return (
-    <Container maxWidth="sm">
-      <Box mt={5} textAlign="center">
-        <Typography variant="h3" gutterBottom>
-          Configura tu Trivia
-        </Typography>
-        <Typography variant="h6" gutterBottom>
-          Selecciona la temática y dificultad
-        </Typography>
-
-        <Box mb={2}>
-          <Select
-            fullWidth
-            value={category}
-            onChange={(e) => setCategoryValue(e.target.value)}
-            displayEmpty
-          >
-            {categories.map((cat) => (
-                <MenuItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </Box>
-
-        <Box mb={2}>
-          <Select
-            fullWidth
-            value={difficulty}
-            onChange={(e) => setDifficultyValue(e.target.value)}
-          >
-            <MenuItem value="easy">Fácil</MenuItem>
-            <MenuItem value="medium">Medio</MenuItem>
-            <MenuItem value="hard">Difícil</MenuItem>
-          </Select>
-        </Box>
-
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={handleStartGame}
-          disabled={!category}
-        >
-          Jugar!
-        </Button>
-      </Box>
-    </Container>
+    <div className="main-container">
+    <div className="header">
+      <h2 className="title">Trivia</h2>
+    </div>
+    <h1 className="section-title">Seleccionar Categoria</h1>
+    <div className="toggle-group-container">
+      <ToggleButtonGroup
+        color="primary"
+        value={category}
+        exclusive
+        onChange={handleCategoryChange}
+        aria-label="Category selection"
+        className="toggle-group-d"
+      >
+        {categories.map((cat) => (
+          <ToggleButton key={cat.id} value={cat} className="toggle-button">
+            {cat.name}
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+    </div>
+    <h1 className="section-title">Seleccionar Dificultad</h1>
+    <ToggleButtonGroup
+      color="primary"
+      value={difficulty}
+      exclusive
+      onChange={handleDifficultyChange}
+      aria-label="Difficulty selection"
+      className="toggle-group"
+    >
+      <ToggleButton value="easy" className="toggle-button">Facil</ToggleButton>
+      <ToggleButton value="medium" className="toggle-button">Medio</ToggleButton>
+      <ToggleButton value="hard" className="toggle-button">Dificil</ToggleButton>
+      <ToggleButton value="random" className="toggle-button">Aleatorio</ToggleButton>
+    </ToggleButtonGroup>
+    <div className="play-button-container">
+      <Button className="play-button" onClick={handleStartGame} disabled={!category.id || !difficulty}>
+        Play!
+      </Button>
+    </div>
+  </div>
   );
 };
 

@@ -1,12 +1,12 @@
-// src/ProtectedRoute.js
+
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Importamos el hook del contexto
+import { useSelector } from 'react-redux'; 
 
 const ProtectedRoute = ({ element }) => {
-    const { play } = useSelector((state) => state.trivia);  // Usamos el estado global
+    const { play } = useSelector((state) => state.trivia);  
 
-  return play ? element : <Navigate to="/" />;  // Si no se ha iniciado el juego, redirige al home
+  return play ? element : <Navigate to="/" />;  
 };
 
 export default ProtectedRoute;

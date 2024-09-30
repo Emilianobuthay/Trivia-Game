@@ -1,0 +1,57 @@
+.trivia-container {
+    background-color: #101923; 
+    color: white;
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .trivia-content {
+    background-color: #1d2a39; 
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
+    width: 100%;
+    max-width: 600px; 
+  }
+  
+  .question-counter {
+    font-size: 18px; 
+    margin-bottom: 10px;
+  }
+  
+  .trivia-question {
+    font-size: 24px; 
+    margin: 20px 0;
+  }
+  
+  .answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+  }
+  
+  .answer-button {
+    border-radius: 8px; 
+    margin-top: 10px; 
+    transition: background-color 0.3s; 
+  }
+  
+  .answer-button.primary {
+    background-color: #0d7cf2;
+  }
+  
+  .answer-button.correct {
+    background-color: #4caf50; 
+  }
+  
+  .answer-button.incorrect {
+    background-color: #f44336; 
+  }
+  
+  .next-button {
+    margin-top: 20px; 
+  }
+  

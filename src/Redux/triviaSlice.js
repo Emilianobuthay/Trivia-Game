@@ -1,8 +1,9 @@
-// src/store/triviaSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   difficulty: '',
+  nameCategory:'',
   category: '',
   questions: [],
   score: 0,
@@ -19,6 +20,9 @@ const triviaSlice = createSlice({
     },
     setDifficulty: (state, action) => {
       state.difficulty = action.payload;
+    },
+    setNameCategory: (state, action) => {
+      state.nameCategory = action.payload;
     },
     setCategory: (state, action) => {
       state.category = action.payload;
@@ -40,5 +44,5 @@ const triviaSlice = createSlice({
   },
 });
 
-export const { setPlay, setDifficulty, setCategory, setQuestions, addScore, addAttempts, resetGame, exitGame } = triviaSlice.actions;
+export const { setPlay, setDifficulty, setNameCategory, setCategory, setQuestions, addScore, addAttempts, resetGame, exitGame } = triviaSlice.actions;
 export default triviaSlice.reducer;

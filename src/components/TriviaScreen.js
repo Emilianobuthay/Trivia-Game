@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Box, Typography, Container } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import { useTrivia } from '../hooks/useTrivia';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import he from 'he';
+import '../style/TriviaScreen.css';
 
 const TriviaScreen = () => {
   const { questions } = useSelector((state) => state.trivia);
-  const { currentQuestion, currentQuestionIndex, handleAnswer, isGameOver, goToNextQuestion } = useTrivia(questions);
+  const { currentQuestion, currentQuestionIndex, handleAnswer, isGameOver, goToNextQuestion } = useTrivia();
   const navigate = useNavigate();
 
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -45,16 +46,18 @@ const TriviaScreen = () => {
     setShowFeedback(true);
   };
 
+  console.log(currentQuestion)
   return (
-    <Container maxWidth="sm">
-      <Box mt={5} textAlign="center">
-        {/* Agregar contador de preguntas */}
-        <Typography variant="h6">
-          Pregunta {currentQuestionIndex + 1}/5
+    <div className="trivia-container">
+      <Box textAlign="center" className="trivia-content">
+        <Typography variant="h6" className="question-counter">
+          Pregunta {currentQuestionIndex + 1}/{questions.length}
         </Typography>
         
-        <Typography variant="h4">{he.decode(currentQuestion.question)}</Typography>
-        <Box mt={3}>
+        <Typography variant="h4" className="trivia-question">
+          {he.decode(currentQuestion.question)}
+        </Typography>
+        <Box mt={3} className="answers-container">
           {allAnswers.map((answer, index) => {
             const isSelected = selectedAnswer === answer;
             const isCorrect = answer === currentQuestion.correct_answer;
@@ -62,12 +65,8 @@ const TriviaScreen = () => {
               <Button
                 key={index}
                 variant="contained"
-                color={showFeedback 
-                  ? (isSelected ? (isCorrect ? 'success' : 'error') : (isCorrect ? 'success' : 'default'))
-                  : 'primary'}
+                className={`answer-button ${showFeedback ? (isSelected ? (isCorrect ? 'correct' : 'incorrect') : (isCorrect ? 'correct' : 'default')) : 'primary'}`}
                 onClick={() => handleButtonClick(answer)}
-                style={{ margin: '10px', width: '100px' }}
-                fullWidth
               >
                 {answer}
               </Button>
@@ -79,13 +78,13 @@ const TriviaScreen = () => {
             variant="contained"
             color="primary"
             onClick={goToNextQuestion}
-            style={{ marginTop: '20px' }}
+            className="next-button"
           >
-            Next
+            Siguiente
           </Button>
         )}
       </Box>
-    </Container>
+    </div>
   );
 };
 

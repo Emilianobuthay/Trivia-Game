@@ -1,13 +1,13 @@
 // src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';  // Importa el Provider
-import store from './store/store';  // Importa la store que has configurado
+import { Provider } from 'react-redux';  
+import store from './store/store';  
 import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>  {/* Envuelve la app en el Provider */}
+    <Provider store={store}>  
       <App />
     </Provider>
   </React.StrictMode>,
