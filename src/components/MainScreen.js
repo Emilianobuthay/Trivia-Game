@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCategoryList } from '../api/triviaApi';
 import '../style/MainScreen.css'; 
 
+
 const MainScreen = () => {
   const [category, setCategoryValue] = useState('');
   const [difficulty, setDifficultyValue] = useState('');
